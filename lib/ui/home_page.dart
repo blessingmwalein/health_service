@@ -1,3 +1,4 @@
+import 'package:health_service/models/topic_model.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -107,37 +108,38 @@ class _HomePageState extends State<HomePage> {
                 context.router.push(const TopicsRoute());
               }),
               const SizedBox(height: 10),
-              BlocBuilder<TopicBloc, TopicBlocState>(builder: (context, state) {
-                if (state is TopicSuccess) {
-                  // Assuming `state.symptoms` is a List of symptom data
-                  return SizedBox(
-                    height: 140,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: state.topics.length,
+              BlocBuilder<TopicBloc, TopicBlocState>(
+                builder: (context, state) {
+                  if (state is TopicSuccess) {
+                    // Display only the first 4 topics
+                    List<Topic> topicsToShow = state.topics.take(4).toList();
+
+                    return GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2, // Number of columns in the grid
+                        crossAxisSpacing: 10.0, // Spacing between columns
+                        mainAxisSpacing: 10.0, // Spacing between rows
+                      ),
+                      itemCount: topicsToShow.length,
                       itemBuilder: (context, index) {
-                        // Assuming each symptom has a `name` and an `imagePath`
-                        final topic = state.topics[index];
-                        return Row(
-                          children: [
-                            InkWell(
-                                onTap: () {
-                                  context.router
-                                      .push(TopicSingleRoute(topic: topic));
-                                },
-                                child: symptomCard(topic)),
-                            const SizedBox(width: 10),
-                          ],
+                        final topic = topicsToShow[index];
+
+                        return InkWell(
+                          onTap: () {
+                            context.router.push(TopicSingleRoute(topic: topic));
+                          },
+                          child: symptomCard(topic),
                         );
                       },
-                    ),
-                  );
-                } else if (state is TopicLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                } else {
-                  return const Center(child: Text('Something went wrong'));
-                }
-              }),
+                    );
+                  } else if (state is TopicLoading) {
+                    return Container(child: CircularProgressIndicator());
+                  } else {
+                    return Container(child: Text('Something went wrong'));
+                  }
+                },
+              ),
 
               const SizedBox(height: 10),
               headingText("SHRH Information", () {
@@ -165,9 +167,9 @@ class _HomePageState extends State<HomePage> {
                     },
                   );
                 } else if (state is InfoLoading) {
-                  return const Center(child: CircularProgressIndicator());
+                  return Container(child: CircularProgressIndicator());
                 } else {
-                  return const Center(child: Text('Something went wrong'));
+                  return Container(child: Text('Something went wrong'));
                 }
               }),
             ],

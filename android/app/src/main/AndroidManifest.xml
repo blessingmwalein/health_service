@@ -18,7 +18,7 @@
 
     <application
         android:label="health_service"
-        android:name="${applicationName}"
+        android:name="health_service"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

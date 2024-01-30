@@ -36,14 +36,16 @@ Widget symptomCard(Topic topic) {
           },
         ),
       ),
-      Container(
-        width: 100,
-        child: Text(
-          topic.title ?? '',
-          style: TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w400,
-            color: primaryBlack.withOpacity(0.7),
+      Expanded(
+        child: Container(
+          width: 100,
+          child: Text(
+            topic.title ?? '',
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w400,
+              color: primaryBlack.withOpacity(0.7),
+            ),
           ),
         ),
       ),
